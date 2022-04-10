@@ -70,7 +70,8 @@ func getFunc(w http.ResponseWriter, req *http.Request) {
 
 		imgLock.Lock()
 		img = make([]byte, base64.StdEncoding.EncodedLen(len(t)))
-		fmt.Println(img)
+		base64.StdEncoding.Encode(img, t)
+		//fmt.Println(img)
 		imgLock.Unlock()
 
 	}()
@@ -125,5 +126,7 @@ func main() {
 	http.HandleFunc("/keychain/get", getFunc)
 	http.HandleFunc("/keychain/post", postFunc)
 	fmt.Println("Starting server")
-	http.ListenAndServe(":8080", nil)
+	if err=http.ListenAndServe(":8080", nil); err!=nil{
+		fmt.Println("Could not start server:", err)
+	}
 }
