@@ -119,6 +119,7 @@ func runScript() string {
 	cmd, err := exec.Command("/bin/sh", "./script.sh").Output()
 	if err != nil {
 		fmt.Printf("error running script %s", err)
+		fmt.Println(cmd)
 	}
 	output := string(cmd)
 	return output
