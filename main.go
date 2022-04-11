@@ -8,11 +8,17 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 
 	"cloud.google.com/go/storage"
+	"github.com/fogleman/gg"
+	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/font/gofont/goregular"
 	"google.golang.org/api/iterator"
+	"google.golang.org/api/option"
+	"google.golang.org/api/youtube/v3"
 )
 
 const bucket = "keychainbucket"
@@ -108,6 +114,66 @@ func postFunc(w http.ResponseWriter, req *http.Request) {
 	}()
 }
 
+func youtubeChannel() {
+	ctx := context.Background()
+	youtubeService, err := youtube.NewService(ctx, option.WithAPIKey("AIzaSyBp62WYnrV5dXAzdv8LkZ7K2zmXNqcuDCo"))
+	if err != nil {
+		fmt.Println("Error creating YouTube API service:", err)
+		return
+	}
+	channel := youtube.NewChannelsService(youtubeService)
+	channelService := channel.List([]string{"statistics"})
+	response, err := channelService.Id("UCXQJydP8GCBSaB7XpFTIoXg").Do()
+	if err != nil {
+		fmt.Println("Error making YouTube API call:", err)
+		return
+	}
+	stats := response.Items[0].Statistics
+	fmt.Println(response.Items[0].Statistics)
+
+	const S = 200
+
+	for {
+		fmt.Println("Updating Youtube channel img.")
+		im, err := gg.LoadJPG("channel.jpg")
+		if err != nil {
+			fmt.Println("Could not read image template,", err)
+			return
+		}
+		dc := gg.NewContext(S, S)
+		dc.DrawImage(im, 0, 0)
+		dc.SetRGB(0, 0, 0)
+		font, err := truetype.Parse(goregular.TTF)
+		if err != nil {
+			fmt.Println("Could not set font,", err)
+			return
+		}
+		face := truetype.NewFace(font, &truetype.Options{
+			Size: 35,
+		})
+		dc.SetFontFace(face)
+
+		// Subs count
+		dc.DrawStringAnchored(strconv.Itoa(int(stats.SubscriberCount)), 150, 60, 0.5, 0.5)
+
+		face = truetype.NewFace(font, &truetype.Options{
+			Size: 25,
+		})
+		dc.SetFontFace(face)
+		// Views count
+		dc.DrawStringAnchored(strconv.Itoa(int(stats.ViewCount)), 145, 130, 0.5, 0.5)
+		// Videos Coumt
+		dc.DrawStringAnchored(strconv.Itoa(int(stats.VideoCount)), 145, 160, 0.5, 0.5)
+
+		dc.SavePNG("channel.png")
+
+		// Converter goes here
+
+		time.Sleep(time.Minute * 15)
+	}
+
+}
+
 func main() {
 	img = []byte{}
 	//paste()
@@ -126,7 +192,15 @@ func main() {
 	http.HandleFunc("/keychain/get", getFunc)
 	http.HandleFunc("/keychain/post", postFunc)
 	fmt.Println("Starting server")
-	if err=http.ListenAndServe(":8080", nil); err!=nil{
+
+	go func() {
+		for {
+			youtubeChannel()
+			fmt.Println("Youtube Channel func exited, restarting")
+		}
+	}()
+
+	if err = http.ListenAndServe(":8080", nil); err != nil {
 		fmt.Println("Could not start server:", err)
 	}
 }

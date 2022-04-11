@@ -22,4 +22,5 @@ FROM gcr.io/distroless/static:nonroot
 WORKDIR /app
 COPY --from=builder /workspace/server .
 COPY static/ ./static/
+COPY channel.jpg ./channel.jpg
 USER 65532:65532
