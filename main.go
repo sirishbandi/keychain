@@ -116,7 +116,7 @@ func postFunc(w http.ResponseWriter, req *http.Request) {
 }
 
 func runScript() string {
-	cmd, err := exec.Command("/bin/bash", "./script.sh").Output()
+	cmd, err := exec.Command("ls -la").Output()
 	if err != nil {
 		fmt.Println("error running script err:", err)
 	}
