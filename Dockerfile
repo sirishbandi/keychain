@@ -27,4 +27,4 @@ COPY script.sh ./script.sh
 RUN apt update && apt install -y imagemagick
 RUN apt-get install ca-certificates -y
 RUN update-ca-certificates
-USER 65532:65532
+
