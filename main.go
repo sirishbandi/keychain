@@ -176,7 +176,11 @@ func youtubeChannel() {
 		// Videos Coumt
 		dc.DrawStringAnchored(strconv.Itoa(int(stats.VideoCount)), 145, 160, 0.5, 0.5)
 
-		dc.SavePNG("channel.png")
+		err = dc.SavePNG("channel.png")
+		if err != nil {
+			fmt.Println("Error saving image:", err)
+			return
+		}
 
 		fmt.Println("Script output:", runScript())
 
