@@ -23,6 +23,7 @@ WORKDIR /app
 COPY --from=builder /workspace/server .
 COPY static/ ./static/
 COPY channel.jpg ./channel.jpg
+COPY script.sh ./script.sh
 RUN apt update && apt install -y imagemagick
 RUN apt-get install ca-certificates -y
 RUN update-ca-certificates
