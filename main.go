@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os/exec"
 	"strconv"
 	"sync"
 	"time"
@@ -114,6 +115,15 @@ func postFunc(w http.ResponseWriter, req *http.Request) {
 	}()
 }
 
+func runScript() string {
+	cmd, err := exec.Command("/bin/sh", "./script.sh").Output()
+	if err != nil {
+		fmt.Printf("error running script %s", err)
+	}
+	output := string(cmd)
+	return output
+}
+
 func youtubeChannel() {
 	ctx := context.Background()
 	youtubeService, err := youtube.NewService(ctx, option.WithAPIKey("AIzaSyBp62WYnrV5dXAzdv8LkZ7K2zmXNqcuDCo"))
@@ -168,7 +178,7 @@ func youtubeChannel() {
 
 		dc.SavePNG("channel.png")
 
-		// Converter goes here
+		runScript()
 
 		time.Sleep(time.Minute * 15)
 	}
