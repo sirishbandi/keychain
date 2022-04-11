@@ -179,7 +179,7 @@ func youtubeChannel() {
 
 		dc.SavePNG("channel.png")
 
-		runScript()
+		fmt.Println(runScript())
 
 		time.Sleep(time.Minute * 15)
 	}
