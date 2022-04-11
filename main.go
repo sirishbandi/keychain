@@ -116,10 +116,9 @@ func postFunc(w http.ResponseWriter, req *http.Request) {
 }
 
 func runScript() string {
-	cmd, err := exec.Command("/bin/sh", "./script.sh").Output()
+	cmd, err := exec.Command("ls").Output()
 	if err != nil {
-		fmt.Printf("error running script %s", err)
-		fmt.Println(string(cmd))
+		fmt.Println("error running script err:", err)
 	}
 	output := string(cmd)
 	return output
@@ -179,7 +178,7 @@ func youtubeChannel() {
 
 		dc.SavePNG("channel.png")
 
-		fmt.Println(runScript())
+		fmt.Println("Script output:", runScript())
 
 		time.Sleep(time.Minute * 15)
 	}
