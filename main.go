@@ -121,19 +121,20 @@ func youtubeChannel() {
 		fmt.Println("Error creating YouTube API service:", err)
 		return
 	}
-	channel := youtube.NewChannelsService(youtubeService)
-	channelService := channel.List([]string{"statistics"})
-	response, err := channelService.Id("UCXQJydP8GCBSaB7XpFTIoXg").Do()
-	if err != nil {
-		fmt.Println("Error making YouTube API call:", err)
-		return
-	}
-	stats := response.Items[0].Statistics
-	fmt.Println(response.Items[0].Statistics)
-
-	const S = 200
 
 	for {
+		channel := youtube.NewChannelsService(youtubeService)
+		channelService := channel.List([]string{"statistics"})
+		response, err := channelService.Id("UCXQJydP8GCBSaB7XpFTIoXg").Do()
+		if err != nil {
+			fmt.Println("Error making YouTube API call:", err)
+			return
+		}
+		stats := response.Items[0].Statistics
+		fmt.Println(response.Items[0].Statistics)
+
+		const S = 200
+
 		fmt.Println("Updating Youtube channel img.")
 		im, err := gg.LoadJPG("channel.jpg")
 		if err != nil {
