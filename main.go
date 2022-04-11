@@ -116,7 +116,7 @@ func postFunc(w http.ResponseWriter, req *http.Request) {
 }
 
 func runScript() string {
-	cmd, err := exec.Command("gsutil", "cp channel.png gs://keychainbucket/").Output()
+	cmd, err := exec.Command("/bin/sh", "script.sh").Output()
 	if err != nil {
 		fmt.Println("error running script err:", err)
 	}
