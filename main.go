@@ -39,7 +39,7 @@ func listFiles() error {
 }
 
 func listFunc(w http.ResponseWriter, req *http.Request){
-	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
         defer cancel()
 
         it := client.Bucket(bucket).Objects(ctx, nil)
@@ -49,11 +49,11 @@ func listFunc(w http.ResponseWriter, req *http.Request){
                         break
                 }
                 if err != nil {
-                        return fmt.Errorf("Bucket(%q).Objects: %v", bucket, err)
+                        return
                 }
                 fmt.Fprintln(w, attrs.Name)
         }
-        return nil
+        return
 }
 
 func getFunc(w http.ResponseWriter, req *http.Request) {
