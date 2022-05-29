@@ -34,8 +34,26 @@ func listFiles() error {
 	// bucket := "bucket-name"
 	ctx := context.Background()
 
-	it = client.Bucket(bucket).Objects(ctx, nil)
+	it = client.Bucket(bucket)s.Objects(ctx, nil)
 	return nil
+}
+
+func listFunc(w http.ResponseWriter, req *http.Request){
+	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+        defer cancel()
+
+        it := client.Bucket(bucket).Objects(ctx, nil)
+        for {
+                attrs, err := it.Next()
+                if err == iterator.Done {
+                        break
+                }
+                if err != nil {
+                        return fmt.Errorf("Bucket(%q).Objects: %v", bucket, err)
+                }
+                fmt.Fprintln(w, attrs.Name)
+        }
+        return nil
 }
 
 func getFunc(w http.ResponseWriter, req *http.Request) {
@@ -206,6 +224,7 @@ func main() {
 	http.Handle("/", fs)
 	http.HandleFunc("/keychain/get", getFunc)
 	http.HandleFunc("/keychain/post", postFunc)
+	http.HandleFunc("/keychain/lsit", listFunc)
 	fmt.Println("Starting server")
 
 	go func() {
