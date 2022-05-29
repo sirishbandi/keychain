@@ -30,7 +30,7 @@ RUN update-ca-certificates
 RUN chmod 777 ./
 
 # Downloading gcloud package
-RUN apt-get install curl python bash -y
+RUN apt-get install curl python2 bash -y
 RUN curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz
 
 # Installing the package
