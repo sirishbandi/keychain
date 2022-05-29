@@ -34,7 +34,7 @@ func listFiles() error {
 	// bucket := "bucket-name"
 	ctx := context.Background()
 
-	it = client.Bucket(bucket)s.Objects(ctx, nil)
+	it = client.Bucket(bucket).Objects(ctx, nil)
 	return nil
 }
 
