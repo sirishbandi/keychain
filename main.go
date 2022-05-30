@@ -51,9 +51,8 @@ func listFunc(w http.ResponseWriter, req *http.Request){
                 if err != nil {
                         return
                 }
-                fmt.Fprintln(w, attrs.Name)
+                fmt.Fprintln(w, attrs)
         }
-        return
 }
 
 func getFunc(w http.ResponseWriter, req *http.Request) {
@@ -224,7 +223,7 @@ func main() {
 	http.Handle("/", fs)
 	http.HandleFunc("/keychain/get", getFunc)
 	http.HandleFunc("/keychain/post", postFunc)
-	http.HandleFunc("/keychain/lsit", listFunc)
+	http.HandleFunc("/keychain/list", listFunc)
 	fmt.Println("Starting server")
 
 	go func() {
