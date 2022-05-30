@@ -51,7 +51,7 @@ func listFunc(w http.ResponseWriter, req *http.Request){
                 if err != nil {
                         return
                 }
-                fmt.Fprintln(w, attrs)
+                fmt.Fprintln(w, attrs.MediaLink)
         }
 }
 
